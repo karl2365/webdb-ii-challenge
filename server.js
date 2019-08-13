@@ -34,9 +34,39 @@ server.post('/api/cars', async (req, res) => {
     }
     catch (err) {
         res.status(500).json({ message: 'Failed to store data' });
-
     }
 })
 
+server.put('/api/cars/:id', async (req, res) => {
+    try {
+        const update = req.body;
+        if (update.make && update.model && update.mileage) {
+            const count = await db('cars').where('id', '=', req.params.id).update(update);
+            res.status(200).json(count);
+        }
+        else {
+            res.status(400).json({message: "You must have valid car data!"})
+        }
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Failed to update data' });
+    }
+})
+
+server.delete('/api/cars/:id', async (req, res) => {
+    try {
+        const count = await db('cars').where('id', '=', req.params.id).del();
+        if (count > 0){
+            res.status(200).json(count);
+        }
+        else {
+            res.status(404).json({ message: 'not found' });
+        }    
+    }
+    catch (err) {
+        res.status(500).json({ message: 'Failed to delete data' });
+
+    }
+})
 
 module.exports = server;
