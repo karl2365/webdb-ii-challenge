@@ -9,7 +9,7 @@ exports.up = function(knex) {
         .unique()
         .notNullable();
     
-        tbl
+    tbl
         .string('make', 50)
         .notNullable();
 
